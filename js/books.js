@@ -20,6 +20,9 @@ async function fetchBooks() {
             return;
         }
 
+        // Store books in global map for easy access by ID
+        window.allBooks = books;
+
         books.forEach(book => {
             const card = document.createElement('div');
             card.className = 'book-card bg-white rounded-xl shadow-sm overflow-hidden flex flex-col h-full border border-gray-100';
@@ -40,21 +43,14 @@ async function fetchBooks() {
                     <h3 class="font-bold text-gray-800 text-sm line-clamp-2 mb-1">${book.name}</h3>
                     <div class="mt-auto flex justify-between items-center">
                         <span class="text-lg font-bold text-[#1b2a4e]">₹${book.price}</span>
-                        <button 
-                            onclick="addToCart(${book.id})"
-                            class="w-8 h-8 rounded-full flex items-center justify-center transition ${isOutOfStock ? 'bg-gray-300 cursor-not-allowed' : 'bg-[#1b2a4e] text-white hover:bg-[#243a6b]'}"
-                            ${isOutOfStock ? 'disabled' : ''}
-                        >
-                            <i class="fas fa-plus text-xs"></i>
-                        </button>
+                        <div id="book-controls-${book.id}">
+                            ${getBookControlsHtml(book)}
+                        </div>
                     </div>
                 </div>
             `;
             container.appendChild(card);
         });
-
-        // Store books in global map for easy access by ID
-        window.allBooks = books;
 
     } catch (err) {
         console.error('Error fetching books:', err);
@@ -62,29 +58,56 @@ async function fetchBooks() {
     }
 }
 
+function getBookControlsHtml(book) {
+    const cartItem = Cart.get().find(item => item.id == book.id);
+    const quantity = cartItem ? cartItem.quantity : 0;
+    const isOutOfStock = book.stock <= 0;
+
+    if (quantity > 0) {
+        return `
+            <div class="flex items-center gap-2">
+                <button onclick="updateBookQuantity(${book.id}, -1)" class="w-8 h-8 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 flex items-center justify-center transition">
+                    <i class="fas fa-minus text-xs"></i>
+                </button>
+                <span class="font-bold text-[#1b2a4e] w-4 text-center">${quantity}</span>
+                <button onclick="updateBookQuantity(${book.id}, 1)" class="w-8 h-8 rounded-full bg-[#1b2a4e] text-white hover:bg-[#243a6b] flex items-center justify-center transition" ${quantity >= book.stock ? 'disabled' : ''}>
+                    <i class="fas fa-plus text-xs"></i>
+                </button>
+            </div>
+        `;
+    }
+
+    return `
+        <button 
+            onclick="addToCart(${book.id})"
+            class="w-8 h-8 rounded-full flex items-center justify-center transition ${isOutOfStock ? 'bg-gray-300 cursor-not-allowed' : 'bg-[#1b2a4e] text-white hover:bg-[#243a6b]'}"
+            ${isOutOfStock ? 'disabled' : ''}
+        >
+            <i class="fas fa-plus text-xs"></i>
+        </button>
+    `;
+}
+
 function addToCart(bookId) {
-    console.log('Attempting to add bookId:', bookId, 'Type:', typeof bookId);
-    console.log('Available books:', window.allBooks);
-
-    // Use loose comparison (==) to handle string/number mismatches
     const book = window.allBooks.find(b => b.id == bookId);
-
     if (book) {
-        console.log('Book found:', book);
         Cart.add(book);
+        refreshBookControl(bookId);
         showCartFooter();
+    }
+}
 
-        // Visual Feedback
-        const btn = event.currentTarget;
-        if (btn) {
-            const originalContent = btn.innerHTML;
-            btn.innerHTML = '<i class="fas fa-check"></i>';
-            btn.classList.add('bg-green-600', 'scale-110');
-            setTimeout(() => {
-                btn.innerHTML = originalContent;
-                btn.classList.remove('bg-green-600', 'scale-110');
-            }, 1000);
-        }
+function updateBookQuantity(bookId, change) {
+    Cart.updateQuantity(bookId, change);
+    refreshBookControl(bookId);
+    showCartFooter();
+}
+
+function refreshBookControl(bookId) {
+    const container = document.getElementById(`book-controls-${bookId}`);
+    const book = window.allBooks.find(b => b.id == bookId);
+    if (container && book) {
+        container.innerHTML = getBookControlsHtml(book);
     }
 }
 
@@ -93,6 +116,8 @@ function showCartFooter() {
     const count = Cart.get().length;
     if (count > 0) {
         footer.classList.remove('hidden');
+    } else {
+        footer.classList.add('hidden');
     }
 }
 
@@ -100,5 +125,5 @@ function showCartFooter() {
 document.addEventListener('DOMContentLoaded', () => {
     fetchBooks();
     Cart.updateUI();
-    if (Cart.get().length > 0) showCartFooter();
+    showCartFooter();
 });
