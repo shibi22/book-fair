@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - Book Fair</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+</head>
+
+<body class="bg-gray-50 min-h-screen pb-24">
+
+    <!-- Header -->
+    <header class="bg-white p-4 shadow-sm sticky top-0 z-50 flex items-center gap-4">
+        <a href="books.html" class="text-gray-600 hover:text-gray-900">
+            <i class="fas fa-arrow-left text-xl"></i>
+        </a>
+        <h1 class="text-xl font-bold text-gray-800">Your Cart</h1>
+    </header>
+
+    <!-- Cart Items -->
+    <div id="cart-items" class="p-4 space-y-4">
+        <!-- Items injected here -->
+    </div>
+
+    <!-- Empty State -->
+    <div id="empty-cart" class="hidden flex flex-col items-center justify-center h-[60vh] text-gray-400">
+        <i class="fas fa-shopping-basket text-6xl mb-4 text-gray-300"></i>
+        <p class="text-lg">Your cart is empty</p>
+        <a href="books.html" class="mt-4 px-6 py-2 bg-[#1b2a4e] text-white rounded-full font-bold">Browse Books</a>
+    </div>
+
+    <!-- Bottom Action Bar -->
+    <div id="checkout-footer"
+        class="fixed bottom-0 left-0 right-0 bg-white border-t p-4 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]">
+        <div class="flex justify-between items-end mb-4">
+            <span class="text-gray-500">Grand Total</span>
+            <span class="text-2xl font-bold text-[#1b2a4e] cart-total">₹0</span>
+        </div>
+        <button onclick="checkout()"
+            class="w-full bg-green-600 text-white py-3 rounded-lg font-bold text-lg shadow-md hover:bg-green-700 transition flex items-center justify-center gap-2">
+            <i class="fab fa-whatsapp text-2xl"></i> Order via WhatsApp
+        </button>
+    </div>
+
+    <script src="js/cart.js"></script>
+    <script src="js/checkout.js"></script>
+</body>
+
+</html>
