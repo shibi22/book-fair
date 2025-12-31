@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Book Fair – Feedback</title>
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    body {
+      background-image: url('./bookfair.jpeg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+    .overlay {
+      background: rgba(10, 20, 40, 0.65);
+    }
+  </style>
+</head>
+
+<body class="min-h-screen flex items-center justify-center">
+ <img
+    src="bookfair.jpeg"
+    alt="Book Fair Background"
+    class="absolute inset-0 w-full h-full object-cover"
+  />
+  <!-- Overlay -->
+  <div class="overlay absolute inset-0"></div>
+
+  <!-- Content -->
+  <div class="relative z-10 w-full max-w-md mx-4 rounded-xl p-6
+              bg-[#f6e7c1]/95 shadow-2xl text-center">
+
+    <!-- Title -->
+    <h1 class="text-2xl sm:text-3xl font-extrabold text-[#1b2a4e]">
+      Book Fair Feedback
+    </h1>
+
+    <p class="mt-2 text-sm text-[#4a3b2a]">
+      Choose your preferred language to continue
+    </p>
+
+    <!-- Divider -->
+    <div class="my-5 h-1 w-16 mx-auto bg-[#c62828] rounded"></div>
+
+    <!-- Buttons -->
+    <div class="space-y-4">
+
+      <a href="ENGLISH_FORM_URL"
+         class="block w-full py-3 rounded-lg font-semibold
+                bg-[#1b2a4e] text-white hover:bg-[#243a6b]
+                transition">
+        English
+      </a>
+
+      <a href="TANGLISH_FORM_URL"
+         class="block w-full py-3 rounded-lg font-semibold
+                bg-[#f4b400] text-[#1b2a4e] hover:bg-[#e0a800]
+                transition">
+        Tanglish
+      </a>
+
+      <a href="TAMIL_FORM_URL"
+         class="block w-full py-3 rounded-lg font-semibold
+                bg-[#c62828] text-white hover:bg-[#a81f1f]
+                transition">
+        தமிழ்
+      </a>
+
+    </div>
+
+    <!-- Footer -->
+    <p class="mt-6 text-xs text-[#3b2f22]">
+      DYFI Koyambedu Unit
+    </p>
+
+  </div>
+
+</body>
+</html>
